@@ -40,6 +40,29 @@ public class APITest {
 	}
 	
 	@Test
+	public void deveRemoverTarefaComSucesso() {
+		Integer id = RestAssured.given()
+			.body("{\n"
+					+ "	\"task\" : \"Teste via API\",\n"
+					+ "	\"dueDate\" : \"2030-01-01\" \n"
+					+ "} ")
+			.contentType(ContentType.JSON)
+		.when()
+			.post("/todo")			
+		.then()
+			.statusCode(201)
+			.extract().path("id")
+		;
+		
+		RestAssured.given()
+		.when()
+			.delete("/todo/"+id)
+		.then()
+			.statusCode(204)
+		;
+	}
+	
+	@Test
 	public void naoDeveAdicionarTarefaInvalida() {
 		RestAssured.given()
 			.body("{\n"
